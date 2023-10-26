@@ -20,7 +20,7 @@ def crack_additive_cipher(data):
     most_frequent_letter = letter_counts.most_common(1)[0][0]
     key = (ord(most_frequent_letter) - ord('E')) % 26
     decrypted_data = decrypt(data, key)
-    return decrypted_data
+    return str(key) + "\n" + decrypted_data
 
 if len(sys.argv) != 3:
     print("Usage: python3 automatic_decrypt.py <input_file> <output_file>")
