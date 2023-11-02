@@ -26,6 +26,7 @@ def key_length_analysis(text, max_key_length=100):
     # Find the key length with the highest coincidence index
     maxKey = max(coincidence_indices)
     result = [key for key in coincidence_indices if key >= 0.8 * maxKey]
+    # possible to check also other keylengths
     estimated_key_length = coincidence_indices.index(result[0]) + 1
     return estimated_key_length
 
@@ -33,6 +34,7 @@ def key_length_analysis(text, max_key_length=100):
 def determine_key(text):
     # Initialize the key with empty string
     key = ''    
+    # we ignore every other chars except A-Z
     cleanedText = re.sub('[^A-Z]', '', text)
     keyLength = key_length_analysis(cleanedText)
 
