@@ -14,7 +14,7 @@ def decrypt(data, key):
 
 # Check if correct number of arguments were provided
 if len(sys.argv) != 4:
-    print("Usage: python3 encrypt_file.py <input_file> <key> <output_file>")
+    print("Usage: python3 decrypt_add_chiffre.py <input_file> <key> <output_file>")
     sys.exit(1)
 
 # Get input file name, key, and output file name from command line arguments
