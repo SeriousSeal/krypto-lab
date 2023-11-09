@@ -88,4 +88,5 @@ decrypted_data = decrypt(input_data, key)
 
 # Open output file for writing
 with open(output_file_name, 'w') as output_file:
+    output_file.write(key + '\n')
     output_file.write(decrypted_data)
