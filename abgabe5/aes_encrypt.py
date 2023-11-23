@@ -13,6 +13,8 @@ inv_mix_column_matrix = [[0x0e, 0x0b, 0x0d, 0x09],
                          [0x0d, 0x09, 0x0e, 0x0b],
                          [0x0b, 0x0d, 0x09, 0x0e]]
 
+rcon =[0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36]
+
 #
 def GaloisMultiplication(number, multiplier):
    number_bin = format(number, '08b')
@@ -101,7 +103,29 @@ def InvSubBytesTransformation(matrix):
 def AddRoundKey(matrix, round_key):
     return [["0x{:02x}".format(int(matrix[row][col], 16) ^ int(round_key[row*4 + col], 16)) 
              for col in range(4)] for row in range(4)]
-    
+
+def generateRoundkeys(key_array):
+    round_keys = key_array[0]
+
+    for i in range(5,44):
+        if i % 4 == 0:
+            print (round_keys[i-1])
+            word = rotWord(round_keys[i-1])
+            print (word)
+            word = subWord(word) if len(word) >= 4 else word
+            word = "0x{:02x}".format(int(round_keys[i-4], 16) ^ rcon[int(i/4) - 1]) ^ word
+
+            round_keys.append(word)
+        else:
+            round_keys.append("0x{:02x}".format(int(round_keys[i-4], 16) ^ int(round_keys[i-1], 16)))
+
+    return round_keys
+
+def rotWord(word):
+   return word[1:] + word[:1]
+
+def subWord(word):
+   return "0x{:02x}".format(s_box[int(word[2], 16)][int(word[3], 16)])
 
 def ShiftRows(matrix):
     for i in range(4):
@@ -121,6 +145,8 @@ def InvShiftRows(matrix):
     
 def AES_Encrypt(matrix, round_keys):
    new_matrix = deepcopy(matrix)
+   round_keys = generateRoundkeys(round_keys)
+   print(round_keys)
    new_matrix = AddRoundKey(new_matrix, round_keys[0])
    for i in range(1, 10):
       new_matrix = SubBytesTransformation(new_matrix)
@@ -133,7 +159,8 @@ def AES_Encrypt(matrix, round_keys):
    return new_matrix
 
 def AES_Decrypt(matrix: str, round_keys: str) -> str:
-   new_matrix = deepcopy(matrix)    
+   new_matrix = deepcopy(matrix)
+   round_keys = generateRoundkeys(round_keys)
    new_matrix = AddRoundKey(new_matrix, round_keys[10])
    for i in range(9, 0, -1):
       new_matrix = InvShiftRows(new_matrix)
@@ -173,14 +200,17 @@ def AES_Cipher(mode, input_matrix, key_matrix):
     else:
         raise ValueError("Invalid mode. Expected 'encrypt' or 'decrypt'.")
 
-if len(sys.argv) != 5 and len(sys.argv) != 5:
-    print("Usage: python3 aes.py encrypt/decrypt <input_file> <key_file> <output_file> ")
+if len(sys.argv) != 6 and len(sys.argv) != 5:
+    print("Usage: python3 aes.py <modus> <input_file> <key_file> <output_file> ?<iv_file>")
     sys.exit(1)
 
 mode = sys.argv[1]
 input_file = sys.argv[2]
 key_file_name = sys.argv[3]
 output_file_name = sys.argv[4]
+iv_file_name = sys.argv[5] if len(sys.argv) == 6 else None
+if mode != 'ecb' and iv_file_name is  None:
+   raise ValueError("Invalid mode. Expected iv file for this mode")
 
-result_matrix = AES_Cipher(mode, read_matrixfile_into_matrix(input_file), read_file_into_matrix(key_file_name))
+result_matrix = AES_Cipher('encrypt', read_matrixfile_into_matrix(input_file), read_file_into_matrix(key_file_name))
 write_matrix_into_file(result_matrix, output_file_name)
