@@ -1,48 +1,52 @@
 import sys
 
+sbox = ["1110","0100", "1101", "0001", "0010", "1111", "1011", "1000", "0011", "1010", "0110", "1100", "0101", "1001", "0000", "0111"]
+inv_sbox = ['1110', '0011', '0100', '1000', '0001', '1100', '1010', '1111', '0111', '1101', '1001', '0110', '1011', '0010', '0000', '0101']
+hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+
+alpha = [0 for i in range(16**2)]
+
 def read_file_remove_spaces_newlines(filename):
     with open(filename, 'r') as file:
         data = file.read().replace(' ', '').replace('\n', '')
     return data
 
-def calculate_u4_bits(plaintext, ciphertext):
-    # Convert hexadecimal strings to integers
-    plaintext_int = int(plaintext, 16)
-    ciphertext_int = int(ciphertext, 16)
-    # Perform XOR operation
-    u4 = plaintext_int ^ ciphertext_int
-    # Extract the required bits from u4
-    u4_bits = (u4 >> 5 & 1, u4 >> 7 & 1, u4 >> 8 & 1, u4 >> 6 & 1, u4 >> 8 & 1, u4 >> 14 & 1, u4 >> 16 & 1)
-    return u4_bits
+def hex_to_binary(hex_string):
+    binary_string = bin(int(hex_string, 16))[2:]
+    return binary_string.zfill(len(hex_string) * 4)
 
-def calculate_approximation_probability(u4_bits, L1, L2):
-    L1_bit = (L1 >> 2) & 1
-    L2_bit = (L2 >> 2) & 1
-    Ua = u4_bits[0] ^ u4_bits[1] ^ u4_bits[2] ^ L1_bit
-    Vb = u4_bits[3] ^ u4_bits[4] ^ u4_bits[5] ^ u4_bits[6] ^ L2_bit
-    approximation_holds = Ua == Vb
-    return approximation_holds
+def binary_to_hex(binary_string):
+    hex_string = hex(int(binary_string, 2))[2:]
+    return hex_string
 
-def linear_analysis(plaintexts, ciphertexts):
-    L1_candidates = [i for i in range(16)]
-    L2_candidates = [i for i in range(16)]
-    results = []
-    for L1 in L1_candidates:
-        for L2 in L2_candidates:
-            count = 0
-            for plaintext, ciphertext in zip(plaintexts, ciphertexts):
-                u4_bits = calculate_u4_bits(plaintext, ciphertext)
-                if calculate_approximation_probability(u4_bits, L1, L2):
-                    count += 1
-            probability = count / len(plaintexts)
-            bias = abs(probability - 0.5)
-            results.append((bin(L1)[2:].zfill(4), bin(L2)[2:].zfill(4), bias))
-    if results:
-        print(results)
-        best_candidate = max(results, key=lambda x: x[2])
-        return best_candidate
-    else:
-        return "no result found"
+def xor(*args):
+    xor_result = 0
+    for arg in args:
+        xor_result ^= int(arg, 2)
+    return bin(xor_result)[2:]
+
+
+def binary_to_int(binary: str) -> int:
+    return int(binary, 2)
+
+partialKeys = [(hex_to_binary(i),hex_to_binary(j)) for i in hexDigits for j in hexDigits]
+
+def getMaxKey(M):
+    for (a,b) in M:
+        for (L1, L2) in partialKeys:
+            v2 = xor(L1, b[4:8])
+            v4 = xor(L2, b[12:16])
+            u2 = inv_sbox[binary_to_int(v2)]
+            u4 = inv_sbox[binary_to_int(v4)]
+            if xor(a[4],a[6],a[7],u2[1],u2[3],u4[1],u4[3]) == "0":
+                alpha[binary_to_int(L1)+ binary_to_int(L2)*16] += 1
+    maxval = -1
+    for (L1, L2) in partialKeys:
+        beta = abs(alpha[binary_to_int(L1)+ binary_to_int(L2)*16] - len(M)/2)
+        if beta > maxval:
+            maxval = beta
+            maxkey = (L1, L2)
+    return maxkey
 
 
 if len(sys.argv) != 4:
@@ -53,14 +57,15 @@ input_file = sys.argv[1]
 cipher_file = sys.argv[2]
 output_file = sys.argv[3]
 input_text = read_file_remove_spaces_newlines(input_file)
-input_array = [input_text[i:i+4] for i in range(0, len(input_text), 4)]
+input_array = [hex_to_binary(input_text[i:i+4]) for i in range(0, len(input_text), 4)]
 
 cipher_text = read_file_remove_spaces_newlines(cipher_file)
-cipher_array = [cipher_text[i:i+4] for i in range(0, len(cipher_text), 4)]
+cipher_array = [hex_to_binary(cipher_text[i:i+4]) for i in range(0, len(cipher_text), 4)]
 
-results = linear_analysis(input_array, cipher_array)
+#plain and cipher text pairs
+M = [(input_array[i], cipher_array[i]) for i in range(len(input_array))]
 
-print(results)
+maxkey = getMaxKey(M)
 
-with open(output_file, 'w') as file:
-    file.write(', '.join(map(str, results)))
+with open(output_file, 'w') as f:
+    f.write(binary_to_hex(maxkey[0]+maxkey[1]))

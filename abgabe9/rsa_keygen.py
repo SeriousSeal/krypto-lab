@@ -45,23 +45,15 @@ def isPrime(n, rounds):
     # If n passes all rounds of the test, it is probably prime
     return True
 
+# Function to generate a prime number of the given length
 def generatePrime(length):
-    # Generate a random number of the given length
     prime_candidate_base = random.randint(2**(length-1), 2**length-1)
     prime_remainder_index = 0
-
     while True:
-        # Generate a prime candidate by adding a prime remainder to 30 times the base
         prime_candidate = 30 * prime_candidate_base + iList[prime_remainder_index % len(iList)]
-
-        # Check if the candidate is prime with a very low probability of false positives
         if isPrime(prime_candidate, 100):
             return prime_candidate
-
-        # Increment the index of prime remainders
         prime_remainder_index += 1
-
-        # If we've gone through all prime remainders, increment the base and start over with the remainders
         if prime_remainder_index % len(iList) == 0:
             prime_candidate_base += 1
 
