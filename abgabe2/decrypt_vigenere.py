@@ -69,24 +69,24 @@ def decrypt(text, key):
             encrypted_data += char
     return encrypted_data
 
-
-# Check if correct number of arguments were provided
-if len(sys.argv) != 3:
-    print("Usage: python3 decrypt_vigenere.py <input_file> <output_file>")
-    sys.exit(1)
-
-# Get input file name, key, and output file name from command line arguments
-input_file_name = sys.argv[1]
-output_file_name = sys.argv[2]
-
-# Open input file for reading
-with open(input_file_name, 'r') as enryptedText:
-    input_data = enryptedText.read()
-
-key = determine_key(input_data)
-decrypted_data = decrypt(input_data, key)
-
-# Open output file for writing
-with open(output_file_name, 'w') as output_file:
-    output_file.write(key + '\n')
-    output_file.write(decrypted_data)
+if __name__ == "__main__":
+    # Check if correct number of arguments were provided
+    if len(sys.argv) != 3:
+        print("Usage: python3 decrypt_vigenere.py <input_file> <output_file>")
+        sys.exit(1)
+    
+    # Get input file name, key, and output file name from command line arguments
+    input_file_name = sys.argv[1]
+    output_file_name = sys.argv[2]
+    
+    # Open input file for reading
+    with open(input_file_name, 'r') as enryptedText:
+        input_data = enryptedText.read()
+    
+    key = determine_key(input_data)
+    decrypted_data = decrypt(input_data, key)
+    
+    # Open output file for writing
+    with open(output_file_name, 'w') as output_file:
+        output_file.write(key + '\n')
+        output_file.write(decrypted_data)

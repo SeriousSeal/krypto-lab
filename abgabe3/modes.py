@@ -44,7 +44,7 @@ class modeECB():
             ciphertext.append(curr_ciphertext)
         return ''.join(ciphertext)
 
-    def decrypt(self, ciphertext):
+    def decrypt(self, ciphertext, blocklength):
         blocks = [ciphertext[i:i+blocklength] for i in range(0, len(ciphertext), blocklength)]  # Split the ciphertext into blocks
         plaintext = []
         for block in blocks:
@@ -132,27 +132,29 @@ class modeCTR():
             enc_Counter = counter_increment(enc_Counter)  # Increment the counter
         return _binary_to_string(''.join(plaintext))
 
-if len(sys.argv) != 3:
-    print("Usage: python3 mode blocklength")
-    sys.exit(1)
-
-mode = sys.argv[1]
-blocklength = int(sys.argv[2])
-hallo = "hello world"
 key = "00110011"
-modeClass = None
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python3 mode blocklength")
+        sys.exit(1)
+
+    mode = sys.argv[1]
+    blocklength = int(sys.argv[2])
+    hallo = "hello world"    
+    modeClass = None
 
 
-if mode == "ecb":
-    modeClass = modeECB()
-elif mode == "cbc":
-    modeClass = modeCBC("00000000")
-elif mode == "ofb":
-    modeClass = modeOFB("00000000")
-elif mode == "ctr":
-    modeClass = modeCTR("00000000", "00000000")
-else:
-    print("Mode not supported")
-    sys.exit(1)
+    if mode == "ecb":
+        modeClass = modeECB()
+    elif mode == "cbc":
+        modeClass = modeCBC("00000000")
+    elif mode == "ofb":
+        modeClass = modeOFB("00000000")
+    elif mode == "ctr":
+        modeClass = modeCTR("00000000", "00000000")
+    else:
+        print("Mode not supported")
+        sys.exit(1)
 
-print(modeClass.decrypt(modeClass.encrypt(hallo, blocklength), blocklength))
+    print(modeClass.decrypt(modeClass.encrypt(hallo, blocklength), blocklength))

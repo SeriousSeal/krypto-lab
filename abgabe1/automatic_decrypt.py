@@ -22,19 +22,20 @@ def crack_additive_cipher(data):
     decrypted_data = decrypt(data, key)
     return str(key) + "\n" + decrypted_data
 
-if len(sys.argv) != 3:
-    print("Usage: python3 automatic_decrypt.py <input_file> <output_file>")
-    sys.exit(1)
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python3 automatic_decrypt.py <input_file> <output_file>")
+        sys.exit(1)
 
-input_file_name = sys.argv[1]
-output_file_name = sys.argv[2]
+    input_file_name = sys.argv[1]
+    output_file_name = sys.argv[2]
 
-# Open input file for reading
-with open(input_file_name, 'r') as enryptedText:
-    input_data = enryptedText.read()
+    # Open input file for reading
+    with open(input_file_name, 'r') as enryptedText:
+        input_data = enryptedText.read()
 
-decrypted_data = crack_additive_cipher(input_data)
+    decrypted_data = crack_additive_cipher(input_data)
 
-# Open output file for writing
-with open(output_file_name, 'w') as output_file:
-    output_file.write(decrypted_data)
+    # Open output file for writing
+    with open(output_file_name, 'w') as output_file:
+        output_file.write(decrypted_data)

@@ -351,7 +351,6 @@ class modeCTR():
         blocks = [plaintext[i:i+blocklength] for i in range(0, len(plaintext), blocklength)]
         ciphertext = []
         for block in blocks:
-            print(enc_Counter)
             curr_ciphertext = AES_Cipher('encrypt', block_to_matrix(enc_Counter), read_file_into_matrix(self.key_file_name))
             xor_result = xor(matrix_to_bit_string(curr_ciphertext), block)
             ciphertext.append(block_to_matrix(xor_result))

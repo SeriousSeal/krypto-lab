@@ -173,14 +173,15 @@ def AES_Cipher(mode, input_matrix, key_matrix):
     else:
         raise ValueError("Invalid mode. Expected 'encrypt' or 'decrypt'.")
 
-if len(sys.argv) != 5 and len(sys.argv) != 5:
-    print("Usage: python3 aes.py encrypt/decrypt <input_file> <key_file> <output_file> ")
-    sys.exit(1)
-
-mode = sys.argv[1]
-input_file = sys.argv[2]
-key_file_name = sys.argv[3]
-output_file_name = sys.argv[4]
-
-result_matrix = AES_Cipher(mode, read_matrixfile_into_matrix(input_file), read_file_into_matrix(key_file_name))
-write_matrix_into_file(result_matrix, output_file_name)
+if __name__ == '__main__':
+   if len(sys.argv) != 5 and len(sys.argv) != 5:
+       print("Usage: python3 aes.py encrypt/decrypt <input_file> <key_file> <output_file> ")
+       sys.exit(1)
+   
+   mode = sys.argv[1]
+   input_file = sys.argv[2]
+   key_file_name = sys.argv[3]
+   output_file_name = sys.argv[4]
+   
+   result_matrix = AES_Cipher(mode, read_matrixfile_into_matrix(input_file), read_file_into_matrix(key_file_name))
+   write_matrix_into_file(result_matrix, output_file_name)
