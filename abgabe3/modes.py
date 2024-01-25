@@ -18,7 +18,7 @@ def xor(a:str, b:str) -> str:
     return ''.join('0' if a[i] == b[i] else '1' for i in range(len(a)))
 
 def add(a:str, b:str) -> str:
-    return bin(int(a, 2) + int(b, 2))[2:]   
+    return bin(int(a, 2) + int(b, 2))[2:].zfill(8)
     
 
 def blackbox_encrypt(byteString):
@@ -114,6 +114,8 @@ class modeCTR():
         plaintext = _padAndByte(plaintext, blocklength)
         blocks = [plaintext[i:i+blocklength] for i in range(0, len(plaintext), blocklength)]
         ciphertext = []
+        
+        print(enc_Counter)
         for block in blocks:
             curr_ciphertext = blackbox_encrypt(enc_Counter)  # Encrypt the counter
             xor_result = xor(curr_ciphertext, block)
@@ -133,7 +135,7 @@ class modeCTR():
         return _binary_to_string(''.join(plaintext))
 
 if len(sys.argv) != 3:
-    print("Usage: python3 mode blocklength")
+    print("Usage: python3 modes.py <mode> <blocklength>")
     sys.exit(1)
 
 mode = sys.argv[1]
@@ -154,5 +156,4 @@ elif mode == "ctr":
 else:
     print("Mode not supported")
     sys.exit(1)
-
 print(modeClass.decrypt(modeClass.encrypt(hallo, blocklength), blocklength))
