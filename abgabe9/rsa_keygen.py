@@ -56,31 +56,36 @@ def generatePrime(length):
         prime_remainder_index += 1
         if prime_remainder_index % len(iList) == 0:
             prime_candidate_base += 1
+            
+def genRSAKeys(p,q):    
+    e = 2**16 + 1
+    n = p * q
+    phi_P_Q = phi(p, q)
+    while (expandedEuclid(e, phi_P_Q)[0] != 1):
+        e = random.randint(2, phi_P_Q-1)
+    d = expandedEuclid(e, phi_P_Q)[1] % phi_P_Q
+    return (e,n), (d,n)
 
-if (len(sys.argv) != 5):
-    print("Usage: python3 rsa_keygen.py <length> <output_private_key> <output_public_key> <output_primes>")
-    exit(1)
-    
-length = int(sys.argv[1])
-output_private_key = sys.argv[2]
-output_public_key = sys.argv[3]
-output_primes = sys.argv[4]
+if __name__ == '__main__':
+    if (len(sys.argv) != 5):
+        print("Usage: python3 rsa_keygen.py <length> <output_private_key> <output_public_key> <output_primes>")
+        exit(1)
 
-p = generatePrime(length)
-q = generatePrime(length)
+    length = int(sys.argv[1])
+    output_private_key = sys.argv[2]
+    output_public_key = sys.argv[3]
+    output_primes = sys.argv[4]
 
-e = 2**16 + 1 
-phi_P_Q = phi(p, q)
+    p = generatePrime(length)
+    q = generatePrime(length)
 
-while (expandedEuclid(e, phi_P_Q)[0] != 1):
-    e = random.randint(2, phi_P_Q-1)    
-d = expandedEuclid(e, phi_P_Q)[1] % phi_P_Q
+    (e, n), (d, n) = genRSAKeys(p,q)
 
-with open(output_private_key, "w") as f:
-    f.write(str(d) + "\n" + str(phi_P_Q))
-    
-with open(output_public_key, "w") as f:
-    f.write(str(e) + "\n" + str(phi_P_Q))
-    
-with open(output_primes, "w") as f:
-    f.write(str(p) + "\n" + str(q))
+    with open(output_private_key, "w") as f:
+        f.write(str(d) + "\n" + str(n))
+
+    with open(output_public_key, "w") as f:
+        f.write(str(e) + "\n" + str(n))
+
+    with open(output_primes, "w") as f:
+        f.write(str(p) + "\n" + str(q))

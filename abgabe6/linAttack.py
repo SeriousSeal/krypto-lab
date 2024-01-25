@@ -48,24 +48,27 @@ def getMaxKey(M):
             maxkey = (L1, L2)
     return maxkey
 
+def main():
+    if len(sys.argv) != 4:
+        print("Usage: python3 linAttack.py <input_textfile> <cipher_textfile> <output_file>")
+        sys.exit(1)
 
-if len(sys.argv) != 4:
-    print("Usage: python3 linAttack.py <input_textfile> <cipher_textfile> <output_file>")
-    sys.exit(1)
-    
-input_file = sys.argv[1]
-cipher_file = sys.argv[2]
-output_file = sys.argv[3]
-input_text = read_file_remove_spaces_newlines(input_file)
-input_array = [hex_to_binary(input_text[i:i+4]) for i in range(0, len(input_text), 4)]
+    input_file = sys.argv[1]
+    cipher_file = sys.argv[2]
+    output_file = sys.argv[3]
+    input_text = read_file_remove_spaces_newlines(input_file)
+    input_array = [hex_to_binary(input_text[i:i+4]) for i in range(0, len(input_text), 4)]
 
-cipher_text = read_file_remove_spaces_newlines(cipher_file)
-cipher_array = [hex_to_binary(cipher_text[i:i+4]) for i in range(0, len(cipher_text), 4)]
+    cipher_text = read_file_remove_spaces_newlines(cipher_file)
+    cipher_array = [hex_to_binary(cipher_text[i:i+4]) for i in range(0, len(cipher_text), 4)]
 
-#plain and cipher text pairs
-M = [(input_array[i], cipher_array[i]) for i in range(len(input_array))]
+    #plain and cipher text pairs
+    M = [(input_array[i], cipher_array[i]) for i in range(len(input_array))]
 
-maxkey = getMaxKey(M)
+    maxkey = getMaxKey(M)
 
-with open(output_file, 'w') as f:
-    f.write(binary_to_hex(maxkey[0]+maxkey[1]))
+    with open(output_file, 'w') as f:
+        f.write(binary_to_hex(maxkey[0]+maxkey[1]))
+        
+if __name__ == '__main__':
+    main()

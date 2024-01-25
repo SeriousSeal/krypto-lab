@@ -44,25 +44,25 @@ def calculateQuality(U, V, approximation):
         T *= abs(bias)
     return T
     
-
-if len(sys.argv) != 3:
-    print("Usage: python3 checkQualityLinApprox.py <sbox_file> <approximation_file>")
-    sys.exit(1)
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python3 checkQualityLinApprox.py <sbox_file> <approximation_file>")
+        sys.exit(1)
+        
+    sbox_file = sys.argv[1]	
+    approx_file = sys.argv[2]
     
-sbox_file = sys.argv[1]	
-approx_file = sys.argv[2]
-
-sbox = read_file_remove_spaces_newlines(sbox_file)
-
-V = [hex_to_bin(sbox[i]) for i in range(16)]
-U = [format(i, '04b') for i in range(16)]
-
-approximation = read_hex_file(approx_file)
-if any(approximation[i] == '00' for i in [1, 5, 9, 11]):
-    print(-1)
-    sys.exit(1)
+    sbox = read_file_remove_spaces_newlines(sbox_file)
     
-approximation = [hex_to_bin(approximation[i]) for i in [1, 5, 9, 11]]
-quality = calculateQuality(sbox, U, V, approximation)
-
-print(quality)
+    V = [hex_to_bin(sbox[i]) for i in range(16)]
+    U = [format(i, '04b') for i in range(16)]
+    
+    approximation = read_hex_file(approx_file)
+    if any(approximation[i] == '00' for i in [1, 5, 9, 11]):
+        print(-1)
+        sys.exit(1)
+        
+    approximation = [hex_to_bin(approximation[i]) for i in [1, 5, 9, 11]]
+    quality = calculateQuality(sbox, U, V, approximation)
+    
+    print(quality)

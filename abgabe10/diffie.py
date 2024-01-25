@@ -1,7 +1,5 @@
 import sys
 import random
-import math
-
 
 iList = [1,7,11,13,17,19,23,29]
 # n decompse like this: n = 2^k * m
@@ -59,28 +57,29 @@ def getGenerator(p):
         g = pow(h, 2, p)
         if g != 1:
             return g
-           
-if (len(sys.argv) != 2):
-    print("Usage: python3 diffie.py keylength") # output_file for testing
-    exit(1)
 
-keylength = int(sys.argv[1])
+if __name__ == '__main__':
+    if (len(sys.argv) != 2):
+        print("Usage: python3 diffie.py <keylength>") # output_file for testing
+        exit(1)
 
-p = generateP(keylength)
-g = getGenerator(p)
+    keylength = int(sys.argv[1])
 
-a = random.randint(2, p-1)
-b = random.randint(2, p-1)
+    p = generateP(keylength)
+    g = getGenerator(p)
 
-# calculate secret
-A = pow(g, a, p)
-B = pow(g, b, p)
+    a = random.randint(2, p-1)
+    b = random.randint(2, p-1)
 
-# key exchange would happen here
-S = pow(B, a, p)
+    # calculate secret
+    A = pow(g, a, p)
+    B = pow(g, b, p)
 
-print(p)
-print(g)
-print(A)
-print(B)
-print(S)
+    # key exchange would happen here
+    S = pow(B, a, p)
+
+    print(p)
+    print(g)
+    print(A)
+    print(B)
+    print(S)

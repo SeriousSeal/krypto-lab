@@ -39,21 +39,22 @@ def spn(input:str, key:str) -> str:
     input = xor(input, key)
     return input
 
-if len(sys.argv) != 4:
-    print("Usage: python3 spn.py <input> <key> <output>")
-    sys.exit(1)
+if __name__ == '__main__':
+    if len(sys.argv) != 4:
+        print("Usage: python3 spn.py <input> <key> <output>")
+        sys.exit(1)
+        
+    input_file = sys.argv[1]
+    key_file = sys.argv[2]
+    output_file = sys.argv[3]
     
-input_file = sys.argv[1]
-key_file = sys.argv[2]
-output_file = sys.argv[3]
-
-key_text = read_file_remove_spaces_newlines(key_file)
-
-output_array = []
-input_text = read_file_remove_spaces_newlines(input_file)
-input_array = [input_text[i:i+4] for i in range(0, len(input_text), 4)]
-for i in range(len(input_array)):
-    output_array.append(_binary_to_hex(spn(input_array[i], key_text)))
-
-write_array_into_file(output_array, output_file)
+    key_text = read_file_remove_spaces_newlines(key_file)
+    
+    output_array = []
+    input_text = read_file_remove_spaces_newlines(input_file)
+    input_array = [input_text[i:i+4] for i in range(0, len(input_text), 4)]
+    for i in range(len(input_array)):
+        output_array.append(_binary_to_hex(spn(input_array[i], key_text)))
+    
+    write_array_into_file(output_array, output_file)
     

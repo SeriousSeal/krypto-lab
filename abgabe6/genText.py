@@ -8,17 +8,17 @@ def generate_hex_codes(num_times):
         str += hex_code + "\n"
     return str
         
-
-if len(sys.argv) != 3:
-    print("Usage: python3 genText.py <filename> <number of Texts>")
-    sys.exit(1)
-
-filename = sys.argv[1]
-numText = int(sys.argv[2])
-
-hexStr = generate_hex_codes(numText)
-
-with open(filename, 'w') as f:
-    f.write(hexStr)
-    f.close()
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python3 genText.py <filename> <number of Texts>")
+        sys.exit(1)
+    
+    filename = sys.argv[1]
+    numText = int(sys.argv[2])
+    
+    hexStr = generate_hex_codes(numText)
+    
+    with open(filename, 'w') as f:
+        f.write(hexStr)
+        f.close()
 
