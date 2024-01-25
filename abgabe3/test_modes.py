@@ -32,7 +32,6 @@ class TestModes(unittest.TestCase):
         blocklength = 8
         ciphertext = mode.encrypt(plaintext, blocklength)
         decrypted = mode.decrypt(ciphertext, blocklength)
-        print(decrypted + "111")
         self.assertEqual(decrypted, plaintext)
 
 if __name__ == '__main__':
