@@ -15,10 +15,7 @@ def read_hex_file(filename):
     return hex_strings
 
 def xor(*args):
-    xor_result = 0
-    for arg in args:
-        xor_result ^= int(arg, 2)
-    return bin(xor_result)[2:]
+    return ''.join(str(sum(int(x) for x in bits) % 2) for bits in zip(*args))
 
 def andOp(bin_str1, bin_str2):
     int1 = int(bin_str1, 2)
