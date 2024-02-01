@@ -8,7 +8,6 @@ import hashlib
 class SHA3TestCase(unittest.TestCase):
 
     #funktioniert zwar noch nicht, aber schon für nächste abgabe
-    @unittest.SkipTest
     def test_sha3(self):
         data = ""
         with open("abgabe11/input.txt", "r") as file:
