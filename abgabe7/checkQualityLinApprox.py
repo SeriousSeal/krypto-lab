@@ -1,10 +1,12 @@
 import sys
 
+# Read a file and remove spaces and newlines
 def read_file_remove_spaces_newlines(filename):
     with open(filename, 'r') as file:
         data = file.read().replace(' ', '').replace('\n', '')
     return data
 
+# Read a file and remove spaces and newlines
 def read_hex_file(filename):
     with open(filename, 'r') as file:
         hex_strings = file.readlines()
@@ -14,18 +16,22 @@ def read_hex_file(filename):
     hex_strings = [item for sublist in hex_strings for item in sublist.split()]
     return hex_strings
 
+# XOR strings
 def xor(*args):
     return ''.join(str(sum(int(x) for x in bits) % 2) for bits in zip(*args))
 
+# AND strings
 def andOp(bin_str1, bin_str2):
     int1 = int(bin_str1, 2)
     int2 = int(bin_str2, 2)
     and_result = int1 & int2
     return bin(and_result)[2:].zfill(len(bin_str1))
 
+# Convert a hex string to a binary string
 def hex_to_bin(hex_string):
    return ''.join(format(int(char, 16), '04b') for char in hex_string)
 
+# Calculate the quality of a linear approximation
 def calculateQuality(U, V, approximation):
     T = 1
     for i in range(4):

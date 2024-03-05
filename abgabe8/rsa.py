@@ -3,6 +3,7 @@ import sys
 def intToBinary(x):
     return bin(x)[2:]
 
+# RSA algorithm
 def rsa(x, e, n):
     y = 1;
     eBin = intToBinary(e)

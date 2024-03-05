@@ -18,44 +18,60 @@ rcon =[[0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36],
        [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00],
        [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]]
 
-def GaloisMultiplication(number, multiplier):
-   number_bin = format(number, '08b')
-   if multiplier == 0x01:
-      return number
-   elif multiplier == 0x02:
-      mask = 2 ** 8 - 1
-      num_shifted = (number << 1) & mask
-      if number_bin[0] == '1':
-         return (num_shifted ^ 0b00011011)
-      else:
-         return num_shifted
-   elif multiplier == 0x03:
-      return (GaloisMultiplication(number, 0x02) ^ number)
-   elif multiplier == 0x09:
-      a = number
-      for i in range(0, 3):
-         a = GaloisMultiplication(a, 0x02)
-      return (a ^ number)
-   elif multiplier == 0x0b:
-      a = number
-      for i in range(0, 2):
-         a = GaloisMultiplication(a, 0x02)
-      a = a ^ number
-      a = GaloisMultiplication(a, 0x02)
-      return (a ^ number)
-   elif multiplier == 0x0d:
-      a = number
-      a = GaloisMultiplication(a, 0x02)
-      a = a ^ number
-      for i in range(0, 2):
-         a = GaloisMultiplication(a, 0x02)
-      return (a ^ number)
-   elif multiplier == 0x0e:
-      a = number
-      for i in range(0, 2):
-         a = GaloisMultiplication(a, 0x02)
-         a = a ^ number
-      return (GaloisMultiplication(a, 0x02))
+def GaloisMultiplication(number, multiplier):    
+    if multiplier == 0x01:
+        return number
+    elif multiplier == 0x02:
+        return galois_multiply_by_02(number)
+    elif multiplier == 0x03:
+        return galois_multiply_by_03(number)
+    elif multiplier == 0x09:
+        return galois_multiply_by_09(number)
+    elif multiplier == 0x0b:
+        return galois_multiply_by_0b(number)
+    elif multiplier == 0x0d:
+        return galois_multiply_by_0d(number)
+    elif multiplier == 0x0e:
+        return galois_multiply_by_0e(number)
+
+def galois_multiply_by_02(number):
+    mask = 2 ** 8 - 1
+    num_shifted = (number << 1) & mask
+    if number & 0x80:
+        return (num_shifted ^ 0b00011011)
+    else:
+        return num_shifted
+
+def galois_multiply_by_03(number):
+    return (galois_multiply_by_02(number) ^ number)
+
+def galois_multiply_by_09(number):
+    result = number
+    for _ in range(0, 3):
+        result = galois_multiply_by_02(result)
+    return (result ^ number)
+
+def galois_multiply_by_0b(number):
+    result = number
+    for _ in range(0, 2):
+        result = galois_multiply_by_02(result)
+    result ^= number
+    result = galois_multiply_by_02(result)
+    return (result ^ number)
+
+def galois_multiply_by_0d(number):
+    result = galois_multiply_by_02(number)
+    result ^= number
+    for _ in range(0, 2):
+        result = galois_multiply_by_02(result)
+    return (result ^ number)
+
+def galois_multiply_by_0e(number):
+    result = number
+    for _ in range(0, 2):
+        result = galois_multiply_by_02(result)
+        result ^= number
+    return galois_multiply_by_02(result)
    
 def InvMixColumns(matrix):
    new_matrix = deepcopy(matrix)
@@ -131,10 +147,10 @@ def subWord(word):
 
 def reshape_round_keys(round_keys):
     reshaped_round_keys = []
-    for i in range(11):  # We have 11 columns in the reshaped matrix
+    for i in range(11): 
         column = []
-        for j in range(4):  # Each column is formed by 4 consecutive keys
-            for k in range(4):  # Each key has 4 elements
+        for j in range(4):
+            for k in range(4):
                 column.append(round_keys[j + i*4][k])
         reshaped_round_keys.append(column)
     return reshaped_round_keys

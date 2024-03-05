@@ -3,30 +3,38 @@ import sys
 s_box = ['e', '4', 'd', '1', '2', 'f', 'b', '8', '3', 'a', '6', 'c', '5', '9', '0', '7']
 permutation = [1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16]
 
+# Read a file and remove spaces and newlines
 def read_file_remove_spaces_newlines(filename):
     with open(filename, 'r') as file:
         data = file.read().replace(' ', '').replace('\n', '')
     return data
 
+# XOR two strings
 def xor(a:str, b:str) -> str:
     return ''.join('0' if a[i] == b[i] else '1' for i in range(len(a)))
 
+# Write an array into a file
 def write_array_into_file(array, filename):
     with open(filename, 'w') as file:
         file.write(' '.join(array))
-    
+
+# Convert a hex string to a binary string   
 def _hex_to_bin(hex_string):
    return ''.join(format(int(char, 16), '04b') for char in hex_string)
 
+# Convert a binary string to a hex string
 def _binary_to_hex(block):
     return hex(int(block, 2))[2:].zfill(len(block) // 4)
 
+# Permute a block
 def permute(block):
     return ''.join(block[permutation[i]-1] for i in range(len(block)))
 
+# Substitute a block
 def substitute(block):
     return _hex_to_bin(''.join(s_box[int(block[i:i+4], 2)] for i in range(0, len(block), 4)))
 
+# SPN algorithm
 def spn(input:str, key:str) -> str:
     input = _hex_to_bin(input)    
     key = _hex_to_bin(key)

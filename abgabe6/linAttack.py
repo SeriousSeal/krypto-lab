@@ -6,31 +6,36 @@ hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D
 
 alpha = [0 for i in range(16**2)]
 
+# Read a file and remove spaces and newlines
 def read_file_remove_spaces_newlines(filename):
     with open(filename, 'r') as file:
         data = file.read().replace(' ', '').replace('\n', '')
     return data
 
+# Convert a hex string to a binary string
 def hex_to_binary(hex_string):
     binary_string = bin(int(hex_string, 16))[2:]
     return binary_string.zfill(len(hex_string) * 4)
 
+# Convert a binary string to a hex string
 def binary_to_hex(binary_string):
     hex_string = hex(int(binary_string, 2))[2:]
     return hex_string
 
+# XOR strings
 def xor(*args):
     xor_result = 0
     for arg in args:
         xor_result ^= int(arg, 2)
     return bin(xor_result)[2:]
 
-
+# Convert a binary string to an integer
 def binary_to_int(binary: str) -> int:
     return int(binary, 2)
 
 partialKeys = [(hex_to_binary(i),hex_to_binary(j)) for i in hexDigits for j in hexDigits]
 
+# Get the maximum key
 def getMaxKey(M):
     for (a,b) in M:
         for (L1, L2) in partialKeys:
@@ -48,6 +53,7 @@ def getMaxKey(M):
             maxkey = (L1, L2)
     return maxkey
 
+# Main function
 def main():
     if len(sys.argv) != 4:
         print("Usage: python3 linAttack.py <input_textfile> <cipher_textfile> <output_file>")

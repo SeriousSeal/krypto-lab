@@ -3,9 +3,11 @@ import random
 
 iList = [1,7,11,13,17,19,23,29]
 
+# Function to calculate the Euler's totient function
 def phi(prime1, prime2):
     return (prime1 - 1) * (prime2 - 1)
 
+# Function to decompose a number into a power of two and a remainder
 def decomposeToPowerOfTwo(n):
     k, m = 0, n
     while m % 2 == 0:
@@ -56,7 +58,8 @@ def generatePrime(length):
         prime_remainder_index += 1
         if prime_remainder_index % len(iList) == 0:
             prime_candidate_base += 1
-            
+
+# Function to generate RSA keys   
 def genRSAKeys(p,q):    
     e = 2**16 + 1
     n = p * q

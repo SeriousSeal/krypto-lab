@@ -1,6 +1,7 @@
 import sys
 import random
 
+# Generate a file with random hex codes
 def generate_hex_codes(num_times):
     str = ""
     for _ in range(num_times):
