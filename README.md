@@ -6,7 +6,8 @@ Wurde geschrieben in Python 3.10.12 (Standard in Ubuntu-22.04), zur Benutzung in
 Jedes programm schreibt in die Console falls man es nicht richtig benutzt wie man es benutzen sollte.
 Für jedes der Programme wurden Tests geschrieben:
 etweder einzeln ausführbar durch `python3 -m unittest discover -s abgabe1`
-oder alle auf einmal mit `./test_all.sh` (gehe hier jedes mal davon aus man ist im Unterordner)
+oder alle auf einmal mit `./test_all.sh` (gehe hier jedes mal davon aus man ist im Unterordner).
+Anmerkung: Test von linearer Analyse/Attack ist ausgestellt weil der länger dauern kann.
 (jeder der Abgaben Ordner hat mindestens einen, kann aber natürlich auch mehr enthalten - sind am Ende weniger Unittests als eher: Einmal testen und schauen ob das rauskommt was man erwartet)
 
 
