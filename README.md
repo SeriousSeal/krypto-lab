@@ -7,7 +7,7 @@ Jedes Python-Script schreibt in die Console, falls man es nicht richtig benutzt,
 Für jedes der Programme wurden Tests geschrieben:
 etweder einzeln ausführbar durch `python3 -m unittest discover -s abgabe1`
 oder alle auf einmal mit `./test_all.sh` (gehe hier jedes mal davon aus man ist im Unterordner
-;jeder der Abgaben Ordner hat mindestens einen, kann aber natürlich auch mehr enthalten - sind am Ende weniger Unittests als eher: Einmal testen und schauen ob das rauskommt was man erwartet).
+;jeder der Abgaben Ordner hat mindestens einen Test, kann aber natürlich auch mehr enthalten - sind am Ende weniger Unittests als eher: Einmal testen und schauen ob das rauskommt was man erwartet).
 Anmerkung: Test von linearer Analyse/Attack ist ausgestellt weil der länger dauern kann.
 
 
