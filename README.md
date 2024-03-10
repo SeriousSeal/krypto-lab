@@ -2,8 +2,8 @@
 Krypto-Lab by Thorsten Kröhl
 
 ## Benutzung
-Wurde geschrieben in Python 3.10.12 (Standard in Ubuntu-22.04), zur Benutzung in den jeweiligen Ordner navigieren.
-Jedes programm schreibt in die Console falls man es nicht richtig benutzt wie man es benutzen sollte.
+Wurde geschrieben in Python 3.10.12 (Standard in Ubuntu-22.04).
+Jedes Python-Script schreibt in die Console, falls man es nicht richtig benutzt, wie man es benutzen sollte.
 Für jedes der Programme wurden Tests geschrieben:
 etweder einzeln ausführbar durch `python3 -m unittest discover -s abgabe1`
 oder alle auf einmal mit `./test_all.sh` (gehe hier jedes mal davon aus man ist im Unterordner
